@@ -9,14 +9,14 @@ INPUTFOLDERS = [SAMPLE_FOLDER / "lab1", SAMPLE_FOLDER / "lab2", SAMPLE_FOLDER / 
 OUTPUTFOLDERS = [SAMPLE_FOLDER / "lab1_out", SAMPLE_FOLDER / "lab2_out", SAMPLE_FOLDER / "lab3_out"]
 GENERIC_DIR = SAMPLE_FOLDER / "generic_dir"
     # Note: the files in this folder are placed in ALL inputfolders before execution
-SIMULATION_TYPE = "featurecloud"  # "featurecloud" or "native"
+SIMULATION_TYPE = "native"  # "featurecloud" or "native"
 
 if __name__ == "__main__":
     if SIMULATION_TYPE == "featurecloud":
         run_simulation_featurecloud(
-            data_path="data",
-            clientnames=[str(folder) for folder in INPUTFOLDERS],
-            generic_dir=str(GENERIC_DIR)
+            data_path=str(SAMPLE_FOLDER),
+            clientnames=[folder.name for folder in INPUTFOLDERS],
+            generic_dir=GENERIC_DIR.name
         )
     elif SIMULATION_TYPE == "native":
         run_simulation_native(

@@ -5,11 +5,13 @@ from fedLearnLogic.Client import Client
 from fedLearnLogic.AggregationServer import Aggregator
 
 def fl_algorithm(fed_learning_class_instance: ProtocolFedLearning,
-         inputfolder: str,
-         outputfolder: str):
+         inputfolder: Optional[str] = '/mnt/input',
+         outputfolder: Optional[str] = '/mnt/output'):
     """
     A small linear regression example.
     """
+    assert inputfolder is not None, "inputfolder must be provided"
+    assert outputfolder is not None, "outputfolder must be provided"
     # CLIENT 1: get feature names
     client = Client(inputfolder=inputfolder)
     features = client.get_feature_names()

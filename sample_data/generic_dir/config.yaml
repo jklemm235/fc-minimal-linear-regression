@@ -1,4 +1,4 @@
 LinearRegressionApp:
   datafile: "data.csv"
   separator: ","
-  target: "target"
+  target: "A"

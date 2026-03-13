@@ -1,4 +1,4 @@
-# FeatureCloud Template
+# FeatureCloud App: Minimal linear regression
 
 This repository is a minimal linear regression app based on a starter template 
 for building a [FeatureCloud app](https://featurecloud.ai/) that can be run in two ways:
@@ -13,11 +13,9 @@ The federated learning logic is implemented in:
 The client and aggregation server code is seperated into two classes:
 - `Client`
 - `Aggregator`
-Which code is called is set in if blocks:
-`if fed_learning_class_instance.is_coordinator`.
 
-The template is already wired so that any execution via featurecloud or native execution
-call this same function.
+The aggregator code is usually in relevant `if` blocks:
+`if fed_learning_class_instance.is_coordinator`.
 
 Relevant files:
 

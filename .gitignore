@@ -1,3 +1,7 @@
 .idea
 venv
 *.pyc
+data
+sample_data/logs
+sample_data/tests
+sample_data/workflows
