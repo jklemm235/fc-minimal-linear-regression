@@ -1,5 +1,4 @@
 from numpy import linalg
-
 class Aggregator:
     def __init__(self):
         pass
@@ -9,7 +8,7 @@ class Aggregator:
         all_features = set()
         for features in features_list:
             all_features.update(features)
-        return list(all_features)
+        return sorted(list(all_features))
 
     def intersection_features(self, features_list):
         """Intersection of feature names from all clients."""
@@ -18,7 +17,7 @@ class Aggregator:
         common_features = set(features_list[0])
         for features in features_list[1:]:
             common_features.intersection_update(features)
-        return list(common_features)
+        return sorted(list(common_features))
 
     def calculate_global_beta(self, XtX_list, Xty_list):
         """Calculate the global beta coefficients using the aggregated XtX and Xty."""

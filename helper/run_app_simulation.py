@@ -13,7 +13,7 @@ import FeatureCloud.api.imp.test.commands as test
 
 # native imports
 import threading
-from .localfedlearningsimulator import LocalFedLearningSimulationWrapper
+from helper.localfedlearningsimulator import LocalFedLearningSimulationWrapper
 from helper.protocolfedlearningclass import ProtocolFedLearning
 
 def run_simulation_featurecloud(data_path: str, clientnames: List[str], generic_dir: str):
@@ -54,7 +54,6 @@ def run_simulation_featurecloud(data_path: str, clientnames: List[str], generic_
 
     # inform the user where they can see the test
     print('You can follow the test along at https://featurecloud.ai/development/test')
-    print('You need to login to be able to see the test')
 
 def run_simulation_native(clientpaths: List[str],
                           outputfolders: List[str],

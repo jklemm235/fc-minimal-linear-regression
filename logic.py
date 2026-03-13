@@ -13,18 +13,21 @@ def fl_algorithm(fed_learning_class_instance: ProtocolFedLearning,
     assert inputfolder is not None, "inputfolder must be provided"
     assert outputfolder is not None, "outputfolder must be provided"
     # CLIENT 1: get feature names
+    print(f"Starting Client {fed_learning_class_instance.id}")
     client = Client(inputfolder=inputfolder)
     features = client.get_feature_names()
     fed_learning_class_instance.send_data_to_coordinator(data=features)
 
     # COORDINATOR 1: intersect feature
     if fed_learning_class_instance.is_coordinator:
+        print("Starting Aggregator")
         aggregator = Aggregator()
         features_list = fed_learning_class_instance.gather_data()
         common_features = aggregator.intersection_features(features_list)
         fed_learning_class_instance.broadcast_data(data=common_features)
 
     # CLIENT 2: calculate XtX and Xty
+    print("Client calculates their own XtX and XtY matrices")
     common_features = fed_learning_class_instance.await_data()
     client.update_to_common_features(common_features)
 
@@ -38,12 +41,10 @@ def fl_algorithm(fed_learning_class_instance: ProtocolFedLearning,
         # Sometimes for some algorithms a client managed to send data for a next round
         # before the first round was finished.
         # This messed up the first round
-        # By default we have a counter and for every send_data_to_coordinator
-        # we either use the given memo or a memo like "round1".
-        # in the ROUND 1 before this this default memo is used.
 
     # COORDINATOR 2: calculate global beta and save model
     if fed_learning_class_instance.is_coordinator:
+        print("Coordinator is calculating global beta")
         XtX_list = fed_learning_class_instance.gather_data(memo="XtX")
         XtY_list = fed_learning_class_instance.gather_data(memo="Xty")
             # fyi, we use pickle for serialization, which is why we don't need to do any specific
@@ -52,5 +53,7 @@ def fl_algorithm(fed_learning_class_instance: ProtocolFedLearning,
         fed_learning_class_instance.broadcast_data(data=global_beta, memo="global_beta")
 
     # CLIENT 3: await global beta and save model
+    print(f"Client {fed_learning_class_instance.id} is awaiting global beta for saving the final model")
     global_beta = fed_learning_class_instance.await_data(memo="global_beta")
     client.save_model(global_beta=global_beta, outputfolder=outputfolder)
+    client.report_model_performance(global_beta=global_beta)

@@ -5,3 +5,5 @@ data
 sample_data/logs
 sample_data/tests
 sample_data/workflows
+sample_data/lab*_out
+sample_data/lab*/config.yaml

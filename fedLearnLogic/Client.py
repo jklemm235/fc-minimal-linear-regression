@@ -1,7 +1,9 @@
-from typing import Tuple, List
+from typing import List
 import yaml
 import pandas as pd
 from numpy import ndarray
+import numpy as np
+import os
 
 class Client:
     """Client class to handle local data and computations for a federated linear regression"""
@@ -14,6 +16,8 @@ class Client:
 
         # read in the data
         self.data = pd.read_csv(f"{self.inputfolder}/{self.datafile}", sep=self.separator)
+        # remove rows with any missing values
+        self.data = self.data.dropna()
         self.X = self.data.drop(columns=[self.target])
         self.X["intercept"] = 1.0  # add intercept term
         self.y = self.data[self.target]
@@ -26,8 +30,6 @@ class Client:
     def update_to_common_features(self, common_features: List[str]):
         """Update the local data to only include the common features."""
         self.X = self.X[common_features]
-        # sort to ensure all clients have the same order of features
-        self.X = self.X.sort_index(axis=1)
 
     def calculate_XtX(self):
         """Calculate X^T * X."""
@@ -48,9 +50,24 @@ class Client:
         """
         model = {}
         for feature, beta in zip(self.X.columns, global_beta):
-            model[feature] = beta
-        with open(f"{outputfolder}/model_params.yaml", "w") as f:
-            yaml.dump(model, f)
+            model[feature] = float(np.asarray(beta).item())
+        os.makedirs(outputfolder, exist_ok=True)
+        with open(f"{outputfolder}/model_params.yaml", "w", encoding="utf-8") as f:
+            yaml.safe_dump(model, f, sort_keys=False)
+
+    def report_model_performance(self, global_beta: ndarray):
+        """
+        Calculate the R^2 score of the model on the local data and print it.
+        Args:
+            global_beta: The global beta coefficients calculated by the coordinator.
+        Returns:
+            None
+        """
+        y_pred = self.X @ global_beta
+        ss_total = np.sum((self.y - np.mean(self.y)) ** 2)
+        ss_residual = np.sum((self.y - y_pred) ** 2)
+        r2_score = 1 - (ss_residual / ss_total)
+        print(f"R^2 score of the model on client {self.inputfolder}: {r2_score:.4f}")
 
 
     def _read_config(self) -> dict:
@@ -65,7 +82,7 @@ class Client:
         Raises:
             ValueError: If the config file is missing required sections or parameters.
         """
-        with open(f"{self.inputfolder}/config.yaml", "r") as f:
+        with open(f"{self.inputfolder}/config.yaml", "r", encoding="utf-8") as f:
             config = yaml.safe_load(f)
         # small validation
         if "LinearRegressionApp" not in config:
