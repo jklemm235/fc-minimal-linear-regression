@@ -6,6 +6,10 @@ for building a [FeatureCloud app](https://featurecloud.ai/) that can be run in t
 - as a regular FeatureCloud app using FeatureClouds dockerized testembed, running on just one machine (no publishing needed)
 - as a native local simulation (without Docker) just on one machine (no publishing needed)
 
+Please note that the provided sample data in `sample_data` has way too many features for the 
+small amount of samples, it's just meant to show that the app runs through, not for a meaningful
+prediction/model.
+
 ## How to navigate the code
 
 The federated learning logic is implemented in:
