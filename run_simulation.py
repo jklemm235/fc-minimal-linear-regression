@@ -3,14 +3,17 @@ from logic import fl_algorithm
 from helper.run_app_simulation import run_simulation_featurecloud, run_simulation_native
 
 # Set up which data/config is used
+# you only need to change this
 SCRIPT_FOLDER = Path(__file__).parent
 SAMPLE_FOLDER = SCRIPT_FOLDER / "sample_data"
 INPUTFOLDERS = [SAMPLE_FOLDER / "lab1", SAMPLE_FOLDER / "lab2", SAMPLE_FOLDER / "lab3"]
 OUTPUTFOLDERS = [SAMPLE_FOLDER / "lab1_out", SAMPLE_FOLDER / "lab2_out", SAMPLE_FOLDER / "lab3_out"]
 GENERIC_DIR = SAMPLE_FOLDER / "generic_dir"
     # Note: the files in this folder are placed in ALL inputfolders before execution
-SIMULATION_TYPE = "native"  # "featurecloud" or "native"
+SIMULATION_TYPE = "featurecloud"  # "featurecloud" or "native"
 
+### LOGIC
+# can be ignored
 if __name__ == "__main__":
     if SIMULATION_TYPE == "featurecloud":
         run_simulation_featurecloud(

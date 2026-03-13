@@ -27,7 +27,7 @@ Relevant files:
 You can easily call helper classes such as a client or coordinator class from here and 
 differentiate between client and coordinator via a simple `fed_learning_class_instance.is_coordinator` call.
 - `helper/protocolfedlearningclass.py`: This protocol describes all the federated learning helper methods such as sending and receiving data you can run.
-- `run_simulation.py`: Runs a federeated learning simulation. See the file to change whether featurecloud is used or the simulation is native.
+- `run_simulation.py`: Runs a federeated learning simulation. See the file to change whether featurecloud is used or the simulation is native (set in the first few lines)
 - `requirements.txt`: Please make sure to add any dependencies you add to `logic.py`. 
 Otherwise the dockerized execution of your app will fail, as the Dockerfile to dockerize your app uses this file!
 
